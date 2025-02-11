@@ -3,46 +3,148 @@
     "last_updated": "2025-02-11",
     "version": "1.0",
     "capacity_range": {
-      "min": 101,
+      "min": 100,
       "max": 500
     },
-    "capacity_breakpoints": [250, 500]
+    "capacity_breakpoints": [100, 250, 350, 500]
   },
   "venues": {
-    "oxford_town_hall": {
+    "said_business_school": {
       "institution_info": {
-        "name": "Oxford Town Hall",
-        "domain": "oxford.gov.uk",
-        "location": "St Aldate's, Oxford OX1 1BX",
+        "name": "Said Business School",
+        "domain": "sbs.ox.ac.uk",
+        "location": "Park End Street, Oxford OX1 1HP",
         "status": "unactivated"
       },
       "venues": {
-        "main_hall": {
+        "nelson_mandela_lecture_theatre": {
           "basic_info": {
-            "name": "Main Hall",
+            "name": "Nelson Mandela Lecture Theatre",
             "exact_capacity": 300,
             "capacity_category": "medium",
-            "type": ["conference", "concert", "exhibition"],
-            "building": "Town Hall"
+            "type": ["lecture", "conference", "presentation"],
+            "building": "Main Building"
           },
           "characteristics": {
-            "features": ["Victorian Gothic architecture", "Organ", "Commercial kitchen"],
+            "features": [
+              "State-of-the-art AV",
+              "Tiered seating",
+              "Recording facilities",
+              "Climate control",
+              "Breakout areas"
+            ],
             "accessibility": {
               "step_free": true,
-              "elevator": true
+              "elevator": true,
+              "wheelchair_accessible": true,
+              "hearing_loop": true
             }
           },
           "contact": {
-            "email": "townhall@oxford.gov.uk",
-            "phone": "+44 1865 252195"
+            "email": "conference@sbs.ox.ac.uk",
+            "phone": "+44 1865 288800"
           },
           "profile_status": "unactivated",
           "search_tags": [
-            "town_hall",
+            "said_business_school",
+            "modern",
+            "accessible",
+            "conference",
+            "lecture",
+            "professional"
+          ]
+        }
+      }
+    },
+    "examination_schools": {
+      "institution_info": {
+        "name": "Examination Schools",
+        "domain": "admin.ox.ac.uk",
+        "location": "75-81 High Street, Oxford OX1 4BG",
+        "status": "unactivated"
+      },
+      "venues": {
+        "south_school": {
+          "basic_info": {
+            "name": "South School",
+            "exact_capacity": 450,
+            "capacity_category": "medium",
+            "type": ["examination", "conference", "ceremony"],
+            "building": "Main Building"
+          },
+          "characteristics": {
+            "features": [
+              "Historic architecture",
+              "High ceilings",
+              "Natural light",
+              "Flexible seating",
+              "Adjacent breakout rooms"
+            ],
+            "accessibility": {
+              "step_free": true,
+              "elevator": true,
+              "wheelchair_accessible": true
+            }
+          },
+          "contact": {
+            "email": "exam.schools@admin.ox.ac.uk",
+            "phone": "+44 1865 276905"
+          },
+          "profile_status": "unactivated",
+          "search_tags": [
+            "examination_schools",
+            "historic",
+            "accessible",
             "central_oxford",
-            "victorian",
-            "commercial_kitchen",
-            "accessible"
+            "ceremonial",
+            "flexible"
+          ]
+        }
+      }
+    },
+    "oxford_union": {
+      "institution_info": {
+        "name": "Oxford Union",
+        "domain": "oxford-union.org",
+        "location": "Frewin Court, Oxford OX1 3JB",
+        "status": "unactivated"
+      },
+      "venues": {
+        "debating_chamber": {
+          "basic_info": {
+            "name": "Debating Chamber",
+            "exact_capacity": 400,
+            "capacity_category": "medium",
+            "type": ["debate", "lecture", "performance"],
+            "building": "Main Building"
+          },
+          "characteristics": {
+            "features": [
+              "Victorian Gothic architecture",
+              "Tiered seating",
+              "Stage area",
+              "Historic paintings and murals",
+              "Professional sound system"
+            ],
+            "accessibility": {
+              "step_free": true,
+              "elevator": true,
+              "wheelchair_accessible": true,
+              "hearing_loop": true
+            }
+          },
+          "contact": {
+            "email": "events@oxford-union.org",
+            "phone": "+44 1865 241353"
+          },
+          "profile_status": "unactivated",
+          "search_tags": [
+            "oxford_union",
+            "historic",
+            "debate",
+            "performance",
+            "central_oxford",
+            "iconic"
           ]
         }
       }
