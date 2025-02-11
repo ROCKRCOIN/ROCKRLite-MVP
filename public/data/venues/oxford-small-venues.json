@@ -3,12 +3,57 @@
     "last_updated": "2025-02-11",
     "version": "1.0",
     "capacity_range": {
-      "min": 21,
+      "min": 20,
       "max": 100
     },
-    "capacity_breakpoints": [30, 40, 50, 75, 100]
+    "capacity_breakpoints": [20, 30, 40, 50, 75, 100]
   },
   "venues": {
+    "bodleian_libraries": {
+      "institution_info": {
+        "name": "Bodleian Libraries",
+        "domain": "bodleian.ox.ac.uk",
+        "location": "Broad Street, Oxford OX1 3BG",
+        "status": "unactivated"
+      },
+      "venues": {
+        "weston_lecture_room": {
+          "basic_info": {
+            "name": "Weston Library Lecture Room",
+            "exact_capacity": 80,
+            "capacity_category": "small",
+            "type": ["lecture", "presentation"],
+            "building": "Weston Library"
+          },
+          "characteristics": {
+            "features": [
+              "Modern facilities",
+              "AV equipment",
+              "Flexible seating",
+              "Climate controlled"
+            ],
+            "accessibility": {
+              "step_free": true,
+              "elevator": true,
+              "wheelchair_accessible": true
+            }
+          },
+          "contact": {
+            "email": "venue.hire@bodleian.ox.ac.uk",
+            "phone": "+44 1865 277224"
+          },
+          "profile_status": "unactivated",
+          "search_tags": [
+            "bodleian",
+            "modern",
+            "accessible",
+            "lecture",
+            "presentation",
+            "av_equipped"
+          ]
+        }
+      }
+    },
     "christ_church": {
       "institution_info": {
         "name": "Christ Church",
@@ -26,10 +71,16 @@
             "building": "Main Building"
           },
           "characteristics": {
-            "features": ["Period features", "Natural light", "AV equipment"],
+            "features": [
+              "Period features",
+              "Natural light",
+              "AV equipment",
+              "Flexible layout"
+            ],
             "accessibility": {
               "step_free": true,
-              "elevator": true
+              "elevator": true,
+              "wheelchair_accessible": true
             }
           },
           "contact": {
@@ -39,10 +90,56 @@
           "profile_status": "unactivated",
           "search_tags": [
             "christ_church",
-            "central_oxford",
             "period_features",
-            "av_equipped",
-            "accessible"
+            "accessible",
+            "seminar",
+            "workshop",
+            "av_equipped"
+          ]
+        }
+      }
+    },
+    "magdalen": {
+      "institution_info": {
+        "name": "Magdalen College",
+        "domain": "magd.ox.ac.uk",
+        "location": "High Street, Oxford OX1 4AU",
+        "status": "unactivated"
+      },
+      "venues": {
+        "summer_common_room": {
+          "basic_info": {
+            "name": "Summer Common Room",
+            "exact_capacity": 70,
+            "capacity_category": "small",
+            "type": ["reception", "social", "informal"],
+            "building": "Cloister Building"
+          },
+          "characteristics": {
+            "features": [
+              "River views",
+              "Comfortable seating",
+              "Natural light",
+              "Historic setting"
+            ],
+            "accessibility": {
+              "step_free": false,
+              "elevator": false,
+              "wheelchair_accessible": false
+            }
+          },
+          "contact": {
+            "email": "conference@magd.ox.ac.uk",
+            "phone": "+44 1865 276000"
+          },
+          "profile_status": "unactivated",
+          "search_tags": [
+            "magdalen",
+            "river_view",
+            "historic",
+            "reception",
+            "social",
+            "informal"
           ]
         }
       }
