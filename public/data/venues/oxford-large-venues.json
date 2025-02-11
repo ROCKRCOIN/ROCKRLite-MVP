@@ -3,34 +3,129 @@
     "last_updated": "2025-02-11",
     "version": "1.0",
     "capacity_range": {
-      "min": 501,
-      "max": null
+      "min": 500,
+      "max": 12500
     },
-    "capacity_breakpoints": [750, 1000, 1500]
+    "capacity_breakpoints": [500, 1000, 1500, 5000, 10000, 12500]
   },
   "venues": {
-    "kassam_stadium": {
+    "university_venues": {
       "institution_info": {
-        "name": "Kassam Stadium",
-        "domain": "kassamstadium.com",
-        "location": "Grenoble Road, Oxford OX4 4XP",
+        "name": "University of Oxford",
+        "domain": "ox.ac.uk",
+        "location": "Oxford",
         "status": "unactivated"
       },
       "venues": {
-        "main_stadium": {
+        "sheldonian_theatre": {
           "basic_info": {
-            "name": "Main Stadium",
-            "exact_capacity": 12500,
+            "name": "Sheldonian Theatre",
+            "exact_capacity": 1000,
             "capacity_category": "large",
-            "type": ["sports", "concert", "conference"],
-            "building": "Stadium"
+            "type": ["ceremony", "concert", "lecture"],
+            "building": "Sheldonian Theatre"
           },
           "characteristics": {
-            "features": ["Full-size football pitch", "Conference suites", "Corporate boxes"],
+            "features": [
+              "17th century architecture",
+              "Pipe organ",
+              "Excellent acoustics",
+              "Painted ceiling",
+              "Cupola viewing gallery",
+              "Professional lighting system"
+            ],
+            "accessibility": {
+              "step_free": false,
+              "elevator": true,
+              "wheelchair_accessible": true,
+              "hearing_loop": true
+            }
+          },
+          "contact": {
+            "email": "custodian@sheldon.ox.ac.uk",
+            "phone": "+44 1865 277299"
+          },
+          "profile_status": "unactivated",
+          "search_tags": [
+            "university",
+            "historic",
+            "ceremonial",
+            "central_oxford",
+            "classical_music",
+            "graduation"
+          ]
+        }
+      }
+    },
+    "commercial_venues": {
+      "institution_info": {
+        "name": "Commercial Venues",
+        "domain": "various",
+        "location": "Oxford",
+        "status": "unactivated"
+      },
+      "venues": {
+        "new_theatre": {
+          "basic_info": {
+            "name": "New Theatre Oxford",
+            "exact_capacity": 1800,
+            "capacity_category": "large",
+            "type": ["theatre", "concert", "comedy"],
+            "building": "New Theatre"
+          },
+          "characteristics": {
+            "features": [
+              "Professional stage",
+              "Orchestra pit",
+              "Modern lighting system",
+              "Professional sound system",
+              "Multiple bars",
+              "Box office"
+            ],
             "accessibility": {
               "step_free": true,
               "elevator": true,
-              "parking": "2000 spaces"
+              "wheelchair_accessible": true,
+              "hearing_loop": true
+            }
+          },
+          "contact": {
+            "email": "boxoffice.oxford@theambassadors.com",
+            "phone": "+44 844 871 3020"
+          },
+          "profile_status": "unactivated",
+          "search_tags": [
+            "theatre",
+            "performance",
+            "central_oxford",
+            "professional",
+            "entertainment",
+            "accessible"
+          ]
+        },
+        "kassam_stadium": {
+          "basic_info": {
+            "name": "Kassam Stadium",
+            "exact_capacity": 12500,
+            "capacity_category": "large",
+            "type": ["sport", "conference", "exhibition"],
+            "building": "Kassam Stadium"
+          },
+          "characteristics": {
+            "features": [
+              "Full-size football pitch",
+              "Conference suites",
+              "Multiple function rooms",
+              "Professional PA system",
+              "Large parking facilities",
+              "Corporate boxes"
+            ],
+            "accessibility": {
+              "step_free": true,
+              "elevator": true,
+              "wheelchair_accessible": true,
+              "hearing_loop": true,
+              "accessible_parking": true
             }
           },
           "contact": {
@@ -40,13 +135,16 @@
           "profile_status": "unactivated",
           "search_tags": [
             "stadium",
-            "east_oxford",
-            "large_scale",
+            "sports",
+            "conference",
+            "exhibition",
             "parking",
             "accessible"
           ]
         }
       }
     }
+  }
+}
   }
 }
