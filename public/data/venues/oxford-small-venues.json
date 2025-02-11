@@ -1,0 +1,51 @@
+{
+  "metadata": {
+    "last_updated": "2025-02-11",
+    "version": "1.0",
+    "capacity_range": {
+      "min": 21,
+      "max": 100
+    },
+    "capacity_breakpoints": [30, 40, 50, 75, 100]
+  },
+  "venues": {
+    "christ_church": {
+      "institution_info": {
+        "name": "Christ Church",
+        "domain": "chch.ox.ac.uk",
+        "location": "St Aldate's, Oxford OX1 1DP",
+        "status": "unactivated"
+      },
+      "venues": {
+        "mckenna_room": {
+          "basic_info": {
+            "name": "McKenna Room",
+            "exact_capacity": 80,
+            "capacity_category": "small",
+            "type": ["seminar", "workshop", "meeting"],
+            "building": "Main Building"
+          },
+          "characteristics": {
+            "features": ["Period features", "Natural light", "AV equipment"],
+            "accessibility": {
+              "step_free": true,
+              "elevator": true
+            }
+          },
+          "contact": {
+            "email": "conference.office@chch.ox.ac.uk",
+            "phone": "+44 1865 286990"
+          },
+          "profile_status": "unactivated",
+          "search_tags": [
+            "christ_church",
+            "central_oxford",
+            "period_features",
+            "av_equipped",
+            "accessible"
+          ]
+        }
+      }
+    }
+  }
+}
