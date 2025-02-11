@@ -3,12 +3,80 @@
     "last_updated": "2025-02-11",
     "version": "1.0",
     "capacity_range": {
-      "min": 1,
-      "max": 20
+      "min": 4,
+      "max": 16
     },
-    "capacity_breakpoints": [1, 2, 3, 5, 7, 10, 15, 20]
+    "capacity_breakpoints": [1, 2, 3, 4, 6, 8, 10, 12, 15, 16, 20]
   },
   "venues": {
+    "bodleian_libraries": {
+      "institution_info": {
+        "name": "Bodleian Libraries",
+        "domain": "bodleian.ox.ac.uk",
+        "location": "Broad Street, Oxford OX1 3BG",
+        "status": "unactivated"
+      },
+      "venues": {
+        "upper_reading_room": {
+          "basic_info": {
+            "name": "Upper Reading Room Tutorial Space",
+            "exact_capacity": 12,
+            "capacity_category": "micro",
+            "type": ["tutorial", "research"],
+            "building": "Old Bodleian Library"
+          },
+          "characteristics": {
+            "features": [
+              "Original oak furnishings",
+              "Document examination facilities"
+            ],
+            "accessibility": {
+              "step_free": false,
+              "elevator": true
+            }
+          },
+          "contact": {
+            "email": "special.collections@bodleian.ox.ac.uk"
+          },
+          "profile_status": "unactivated",
+          "search_tags": [
+            "bodleian",
+            "research",
+            "special_collections",
+            "historic"
+          ]
+        },
+        "rare_books_room": {
+          "basic_info": {
+            "name": "Rare Books Viewing Room",
+            "exact_capacity": 8,
+            "capacity_category": "micro",
+            "type": ["research", "special_collections"],
+            "building": "Weston Library"
+          },
+          "characteristics": {
+            "features": [
+              "Conservation-grade lighting",
+              "Document cameras"
+            ],
+            "accessibility": {
+              "step_free": true,
+              "elevator": true
+            }
+          },
+          "contact": {
+            "email": "special.collections@bodleian.ox.ac.uk"
+          },
+          "profile_status": "unactivated",
+          "search_tags": [
+            "weston_library",
+            "rare_books",
+            "research",
+            "accessible"
+          ]
+        }
+      }
+    },
     "christ_church": {
       "institution_info": {
         "name": "Christ Church",
@@ -17,31 +85,143 @@
         "status": "unactivated"
       },
       "venues": {
-        "allestree_room": {
+        "tom_7": {
           "basic_info": {
-            "name": "Allestree Room",
-            "exact_capacity": 15,
+            "name": "Tom 7",
+            "exact_capacity": 12,
             "capacity_category": "micro",
-            "type": ["tutorial", "small_meeting"],
-            "building": "Main Building"
+            "type": ["tutorial", "seminar"],
+            "building": "Tom Quad"
           },
           "characteristics": {
-            "features": ["Period furnishings", "Natural light"],
+            "features": [
+              "Historic turret room",
+              "Original features"
+            ],
             "accessibility": {
               "step_free": false,
               "elevator": false
             }
           },
           "contact": {
-            "email": "conference.office@chch.ox.ac.uk",
-            "phone": "+44 1865 286990"
+            "email": "tutorial.office@chch.ox.ac.uk"
           },
           "profile_status": "unactivated",
           "search_tags": [
             "christ_church",
-            "central_oxford",
-            "period_features",
-            "tutorial_room"
+            "historic",
+            "tutorial_room",
+            "tom_quad"
+          ]
+        },
+        "meadow_4": {
+          "basic_info": {
+            "name": "Meadow 4",
+            "exact_capacity": 10,
+            "capacity_category": "micro",
+            "type": ["tutorial", "seminar"],
+            "building": "Meadow Building"
+          },
+          "characteristics": {
+            "features": [
+              "Garden views",
+              "Traditional furnishing"
+            ],
+            "accessibility": {
+              "step_free": false,
+              "elevator": false
+            }
+          },
+          "contact": {
+            "email": "tutorial.office@chch.ox.ac.uk"
+          },
+          "profile_status": "unactivated",
+          "search_tags": [
+            "christ_church",
+            "garden_view",
+            "tutorial_room",
+            "traditional"
+          ]
+        }
+      }
+    },
+    "oxford_union": {
+      "institution_info": {
+        "name": "Oxford Union",
+        "domain": "oxford-union.org",
+        "location": "Frewin Court, Oxford OX1 3JB",
+        "status": "unactivated"
+      },
+      "venues": {
+        "percy_room": {
+          "basic_info": {
+            "name": "Percy Room",
+            "exact_capacity": 15,
+            "capacity_category": "micro",
+            "type": ["research", "meeting"],
+            "building": "Main Building"
+          },
+          "characteristics": {
+            "features": [
+              "Traditional decor",
+              "Research tables"
+            ],
+            "accessibility": {
+              "step_free": false,
+              "elevator": true
+            }
+          },
+          "contact": {
+            "email": "librarian@oxford-union.org"
+          },
+          "profile_status": "unactivated",
+          "search_tags": [
+            "oxford_union",
+            "research",
+            "traditional",
+            "central_oxford"
+          ]
+        }
+      }
+    },
+    "ashmolean": {
+      "institution_info": {
+        "name": "Ashmolean Museum",
+        "domain": "ashmus.ox.ac.uk",
+        "location": "Beaumont Street, Oxford OX1 2PH",
+        "status": "unactivated"
+      },
+      "venues": {
+        "eastern_art_room": {
+          "basic_info": {
+            "name": "Eastern Art Room",
+            "exact_capacity": 12,
+            "capacity_category": "micro",
+            "type": ["study", "specialist", "research"],
+            "building": "Main Building"
+          },
+          "characteristics": {
+            "features": [
+              "Specialist lighting",
+              "Object viewing tables",
+              "Art handling facilities"
+            ],
+            "accessibility": {
+              "step_free": true,
+              "elevator": true,
+              "wheelchair_accessible": true
+            }
+          },
+          "contact": {
+            "email": "academic.services@ashmus.ox.ac.uk"
+          },
+          "profile_status": "unactivated",
+          "search_tags": [
+            "ashmolean",
+            "eastern_art",
+            "specialist",
+            "accessible",
+            "research"
           ]
         }
       }
