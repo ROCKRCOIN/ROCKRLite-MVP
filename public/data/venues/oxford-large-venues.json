@@ -1,0 +1,52 @@
+{
+  "metadata": {
+    "last_updated": "2025-02-11",
+    "version": "1.0",
+    "capacity_range": {
+      "min": 501,
+      "max": null
+    },
+    "capacity_breakpoints": [750, 1000, 1500]
+  },
+  "venues": {
+    "kassam_stadium": {
+      "institution_info": {
+        "name": "Kassam Stadium",
+        "domain": "kassamstadium.com",
+        "location": "Grenoble Road, Oxford OX4 4XP",
+        "status": "unactivated"
+      },
+      "venues": {
+        "main_stadium": {
+          "basic_info": {
+            "name": "Main Stadium",
+            "exact_capacity": 12500,
+            "capacity_category": "large",
+            "type": ["sports", "concert", "conference"],
+            "building": "Stadium"
+          },
+          "characteristics": {
+            "features": ["Full-size football pitch", "Conference suites", "Corporate boxes"],
+            "accessibility": {
+              "step_free": true,
+              "elevator": true,
+              "parking": "2000 spaces"
+            }
+          },
+          "contact": {
+            "email": "info@kassamstadium.com",
+            "phone": "+44 1865 337500"
+          },
+          "profile_status": "unactivated",
+          "search_tags": [
+            "stadium",
+            "east_oxford",
+            "large_scale",
+            "parking",
+            "accessible"
+          ]
+        }
+      }
+    }
+  }
+}
