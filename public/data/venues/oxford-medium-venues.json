@@ -1,0 +1,51 @@
+{
+  "metadata": {
+    "last_updated": "2025-02-11",
+    "version": "1.0",
+    "capacity_range": {
+      "min": 101,
+      "max": 500
+    },
+    "capacity_breakpoints": [250, 500]
+  },
+  "venues": {
+    "oxford_town_hall": {
+      "institution_info": {
+        "name": "Oxford Town Hall",
+        "domain": "oxford.gov.uk",
+        "location": "St Aldate's, Oxford OX1 1BX",
+        "status": "unactivated"
+      },
+      "venues": {
+        "main_hall": {
+          "basic_info": {
+            "name": "Main Hall",
+            "exact_capacity": 300,
+            "capacity_category": "medium",
+            "type": ["conference", "concert", "exhibition"],
+            "building": "Town Hall"
+          },
+          "characteristics": {
+            "features": ["Victorian Gothic architecture", "Organ", "Commercial kitchen"],
+            "accessibility": {
+              "step_free": true,
+              "elevator": true
+            }
+          },
+          "contact": {
+            "email": "townhall@oxford.gov.uk",
+            "phone": "+44 1865 252195"
+          },
+          "profile_status": "unactivated",
+          "search_tags": [
+            "town_hall",
+            "central_oxford",
+            "victorian",
+            "commercial_kitchen",
+            "accessible"
+          ]
+        }
+      }
+    }
+  }
+}
