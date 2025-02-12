@@ -1,4 +1,11 @@
-// experience-types.ts
+import { 
+  GraduationCap, 
+  Tv, 
+  Group,
+  Medal,
+  ShoppingBag,
+  HeartPulse
+} from 'lucide-react';
 
 // Type definitions
 interface ExperienceType {
