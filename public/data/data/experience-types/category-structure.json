@@ -1,0 +1,72 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-02-12",
+  "categories": {
+    "retail": {
+      "book_launch": {
+        "structure": {
+          "level_3": {
+            "fiction": {
+              "id": "fiction",
+              "label": "Fiction",
+              "level_4": {
+                "action": {
+                  "id": "action",
+                  "label": "Action",
+                  "level_5": ["Thrillers", "Adventure", "Espionage", "Military Fiction"]
+                },
+                "comedy": {
+                  "id": "comedy",
+                  "label": "Comedy",
+                  "level_5": ["Humorous novels", "Satire", "Romantic Comedy"]
+                },
+                "crime_mystery": {
+                  "id": "crime_mystery",
+                  "label": "Crime/Mystery",
+                  "level_5": ["Detective novels", "Procedurals", "Cozy Mysteries", "Noir"]
+                }
+              }
+            },
+            "non_fiction": {
+              "id": "non_fiction",
+              "label": "Non-Fiction",
+              "level_4": {
+                "biography": {
+                  "id": "biography",
+                  "label": "Biography/Autobiography",
+                  "level_5": ["Accounts of real lives"]
+                },
+                "business": {
+                  "id": "business",
+                  "label": "Business/Finance",
+                  "level_5": ["Books on economics", "Investing", "Management"]
+                },
+                "cookbooks": {
+                  "id": "cookbooks",
+                  "label": "Cookbooks",
+                  "level_5": ["Recipes and culinary information"]
+                }
+              }
+            },
+            "other_hybrid": {
+              "id": "other_hybrid",
+              "label": "Other/Hybrid Genres",
+              "level_4": {
+                "graphic_novels": {
+                  "id": "graphic_novels",
+                  "label": "Graphic Novels/Comics",
+                  "level_5": ["Illustrated stories"]
+                },
+                "poetry": {
+                  "id": "poetry",
+                  "label": "Poetry",
+                  "level_5": ["Verse writing"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
