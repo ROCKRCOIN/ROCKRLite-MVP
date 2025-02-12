@@ -1,1 +1,189 @@
-
+{
+  "version": "1.0",
+  "lastUpdated": "2025-02-12",
+  "types": {
+    "educational": {
+      "id": "educational",
+      "label": "Educational",
+      "icon": "GraduationCap",
+      "settings": [
+        {
+          "id": "tutorial",
+          "label": "Tutorial",
+          "capacity_default": [1, 2, 3, 5, 7, 10]
+        },
+        {
+          "id": "lecture_presentation",
+          "label": "Lecture/Presentation",
+          "capacity_default": [20, 30, 40, 50, 75, 100, 250]
+        },
+        {
+          "id": "laboratory",
+          "label": "Laboratory",
+          "capacity_default": [10, 15, 20, 30]
+        },
+        {
+          "id": "seminar",
+          "label": "Seminar",
+          "capacity_default": [10, 15, 20, 30]
+        },
+        {
+          "id": "conference",
+          "label": "Conference",
+          "capacity_default": [50, 75, 100, 250, 500]
+        },
+        {
+          "id": "classroom_0_3",
+          "label": "Classroom 0-3 years",
+          "capacity_default": [10, 15, 20]
+        },
+        {
+          "id": "classroom_3_5",
+          "label": "Classroom 3-5 years",
+          "capacity_default": [10, 15, 20]
+        },
+        {
+          "id": "classroom_5_7",
+          "label": "Classroom 5-7 years",
+          "capacity_default": [15, 20, 30]
+        },
+        {
+          "id": "classroom_7_11",
+          "label": "Classroom 7-11 years",
+          "capacity_default": [20, 30, 40]
+        },
+        {
+          "id": "classroom_11_13",
+          "label": "Classroom 11-13 years",
+          "capacity_default": [20, 30, 40]
+        },
+        {
+          "id": "classroom_13_15",
+          "label": "Classroom 13-15 years",
+          "capacity_default": [20, 30, 40]
+        },
+        {
+          "id": "classroom_15_18",
+          "label": "Classroom 15-18 years",
+          "capacity_default": [20, 30, 40]
+        },
+        {
+          "id": "course",
+          "label": "Course",
+          "capacity_default": [10, 15, 20, 30, 40, 50]
+        },
+        {
+          "id": "workshop",
+          "label": "Workshop",
+          "capacity_default": [10, 15, 20, 30]
+        },
+        {
+          "id": "debate",
+          "label": "Debate",
+          "capacity_default": [20, 30, 40, 50]
+        },
+        {
+          "id": "exhibition",
+          "label": "Exhibition",
+          "capacity_default": [50, 75, 100, 250]
+        },
+        {
+          "id": "tour",
+          "label": "Tour",
+          "capacity_default": [10, 15, 20, 30]
+        },
+        {
+          "id": "walk",
+          "label": "Walk",
+          "capacity_default": [10, 15, 20, 30]
+        },
+        {
+          "id": "training",
+          "label": "Training",
+          "capacity_default": [10, 15, 20, 30]
+        },
+        {
+          "id": "coaching_mentoring",
+          "label": "Coaching/Mentoring",
+          "capacity_default": [1, 2, 3, 5, 7, 10]
+        },
+        {
+          "id": "retreat",
+          "label": "Retreat",
+          "capacity_default": [10, 15, 20, 30]
+        }
+      ]
+    },
+    "arts": {
+      "id": "arts",
+      "label": "Arts and Culture",
+      "icon": "Tv",
+      "settings": [
+        {
+          "id": "theatre_play",
+          "label": "Theatre: Play",
+          "capacity_default": [50, 75, 100, 250, 500]
+        },
+        {
+          "id": "theatre_musical",
+          "label": "Theatre: Musical",
+          "capacity_default": [50, 75, 100, 250, 500]
+        },
+        {
+          "id": "theatre_opera",
+          "label": "Theatre: Opera",
+          "capacity_default": [50, 75, 100, 250, 500]
+        },
+        {
+          "id": "theatre_ballet_dance",
+          "label": "Theatre: Ballet/Dance",
+          "capacity_default": [50, 75, 100, 250, 500]
+        },
+        {
+          "id": "theatre_standup",
+          "label": "Theatre: Stand-up",
+          "capacity_default": [50, 75, 100, 250]
+        },
+        {
+          "id": "concert",
+          "label": "Concert",
+          "capacity_default": [50, 75, 100, 250, 500, 1500]
+        },
+        {
+          "id": "festival",
+          "label": "Festival",
+          "capacity_default": [250, 500, 1500]
+        },
+        {
+          "id": "recital",
+          "label": "Recital",
+          "capacity_default": [30, 40, 50, 75, 100]
+        },
+        {
+          "id": "screening",
+          "label": "Screening",
+          "capacity_default": [50, 75, 100, 250]
+        },
+        {
+          "id": "gaming",
+          "label": "Gaming",
+          "capacity_default": [20, 30, 40, 50]
+        },
+        {
+          "id": "circus",
+          "label": "Circus",
+          "capacity_default": [100, 250, 500, 1500]
+        }
+      ]
+    },
+    "community": {
+      "id": "community",
+      "label": "Community",
+      "icon": "Group",
+      "settings": [
+        {
+          "id": "market",
+          "label": "Market",
+          "capacity_default": [50, 75, 100, 250, 500]
+        },
+        {
