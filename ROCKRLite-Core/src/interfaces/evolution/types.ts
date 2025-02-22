@@ -1,4 +1,57 @@
-import { Version } from '../state/types';
+import type { Dispatch } from 'react';
+
+export interface Version {
+  major: number;
+  minor: number;
+  patch: number;
+  hash?: string;
+  timestamp?: number;
+}
+
+export interface RolloutPhase {
+  id: string;
+  name: string;
+  duration: number;
+  percentage: number;
+}
+
+export interface RolloutCondition {
+  type: string;
+  value: any;
+  operator: string;
+}
+
+export interface MetricThreshold {
+  metric: string;
+  min?: number;
+  max?: number;
+  target: number;
+}
+
+export interface AlertConfig {
+  type: string;
+  threshold: number;
+  action: string;
+}
+
+export interface MigrationStep {
+  id: string;
+  type: string;
+  action: string;
+  rollback: string;
+}
+
+export interface ValidationStep {
+  id: string;
+  type: string;
+  criteria: string[];
+}
+
+export interface RollbackStep {
+  id: string;
+  type: string;
+  action: string;
+}
 
 export interface EvolutionState {
   version: Version;
@@ -68,7 +121,7 @@ export interface EvolutionAction {
 
 export interface EvolutionContextValue {
   state: EvolutionState;
-  dispatch: React.Dispatch<EvolutionAction>;
+  dispatch: Dispatch<EvolutionAction>;
   versions: {
     current: Version;
     supported: Version[];
