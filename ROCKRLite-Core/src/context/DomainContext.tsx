@@ -1,78 +1,77 @@
-import React, { createContext, useContext, useReducer } from 'react';
-import { Domain, DomainState, DomainAction, DomainContextValue } from '../interfaces/domain/types';
-import { useStateContext } from './StateContext';
-import { useEvolution } from './EvolutionContext';
+// Full path: src/context/DomainContext.tsx
 
-const DomainContext = createContext<DomainContextValue | undefined>(undefined);
+import React, { createContext, useReducer, useRef, useEffect } from 'react';
+import type { DomainState, DomainAction, DomainContextValue } from '../interfaces/domain/types';
+import { validateDomainAccess, getDomainConfiguration, getPermissions } from '../utils/domain';
+import { validateVersion, executeMigration } from '../utils/evolution';
 
-export interface DomainProviderProps {
-  children: React.ReactNode;
-  initialState: Partial<DomainState>;
+const initialState: DomainState = {
+  currentDomain: null,
+  domains: [],
+  loading: false,
+  error: null,
+  features: {},
+  restrictions: [],
+  version: {
+    major: 1,
+    minor: 0,
+    patch: 0
+  }
+};
+
+export const DomainContext = createContext<DomainContextValue | undefined>(undefined);
+
+function domainReducer(state: DomainState, action: DomainAction): DomainState {
+  switch (action.type) {
+    case 'SWITCH_DOMAIN':
+      return {
+        ...state,
+        currentDomain: action.payload
+      };
+    case 'UPDATE_CONFIG':
+      return {
+        ...state,
+        features: action.payload.features,
+        restrictions: action.payload.restrictions
+      };
+    case 'UPDATE_VERSION':
+      return {
+        ...state,
+        version: action.payload
+      };
+    case 'SET_ERROR':
+      return {
+        ...state,
+        error: action.payload
+      };
+    default:
+      return state;
+  }
 }
 
-export const DomainProvider: React.FC<DomainProviderProps> = ({
-  children,
-  initialState
-}) => {
-  const [state, dispatch] = useReducer(domainReducer, initialState as DomainState);
-  const { state: globalState } = useStateContext();
-  const { state: evolutionState } = useEvolution();
+export function DomainProvider({ children }: { children: React.ReactNode }) {
+  const [state, dispatch] = useReducer(domainReducer, initialState);
+  const stateRef = useRef(state);
 
-  const value = {
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
+
+  const value: DomainContextValue = {
     state,
     dispatch,
     operations: {
-      switchDomain: async (domain: Domain) => {
-        // Implementation
-        if (await validateDomainSwitch(domain)) {
-          dispatch({ type: 'SWITCH_DOMAIN', payload: domain });
-        }
-      },
-      validateDomain: (domain: Domain) => {
-        // Implementation
-        return validateDomainConfig(domain);
-      },
-      updateSettings: async (domain: Domain, settings: DomainConfig) => {
-        // Implementation
-        if (validateDomainSettings(settings)) {
-          dispatch({ 
-            type: 'UPDATE_DOMAIN_CONFIG', 
-            payload: { id: domain.id, config: settings }
-          });
-        }
-      }
+      validateDomain: validateDomainAccess,
+      getDomainConfig: getDomainConfiguration,
+      checkDomainAccess: validateDomainAccess
     },
     access: {
-      validateAccess: (user: User, domain: Domain) => {
-        // Implementation
-        return validateUserAccess(user, domain);
-      },
-      getDomainPermissions: (user: User, domain: Domain) => {
-        // Implementation
-        return getUserPermissions(user, domain);
-      },
-      updatePermissions: async (user: User, permissions: Permission[]) => {
-        // Implementation
-        if (validatePermissions(permissions)) {
-          await updateUserPermissions(user, permissions);
-        }
-      }
+      validateAccess: validateDomainAccess,
+      getDomainPermissions: getPermissions
     },
-    crossDomain: {
-      shareExperience: async (experience: Experience, domains: Domain[]) => {
-        // Implementation
-        if (validateCrossDomainSharing(experience, domains)) {
-          await shareToDomains(experience, domains);
-        }
-      },
-      validateCrossDomain: (source: Domain, target: Domain) => {
-        // Implementation
-        return validateCrossDomainAccess(source, target);
-      },
-      syncDomainData: async (domains: Domain[]) => {
-        // Implementation
-        await synchronizeDomains(domains);
-      }
+    evolution: {
+      validateVersion,
+      migrate: executeMigration
     }
   };
 
@@ -81,12 +80,4 @@ export const DomainProvider: React.FC<DomainProviderProps> = ({
       {children}
     </DomainContext.Provider>
   );
-};
-
-export const useDomain = () => {
-  const context = useContext(DomainContext);
-  if (context === undefined) {
-    throw new Error('useDomain must be used within a DomainProvider');
-  }
-  return context;
-};
+}
