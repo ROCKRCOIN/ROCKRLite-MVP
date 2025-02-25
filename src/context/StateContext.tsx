@@ -1,16 +1,15 @@
-// Full path: src/context/StateContext.tsx
-
-import React, { createContext, useContext, useReducer, useRef, useEffect } from 'react';
+// src/context/StateContext.tsx
+import React, { createContext, useReducer, useRef, useEffect } from 'react';
 import {
   StateSystem,
   StateAction,
   StateContextValue,
   StateBackup,
-  StateConflict,
-  MigrationStrategy
-} from '../interfaces/state/types';
+  StateConflict
+} from '../interfaces/state/state-types-new';
+import { MigrationStrategy } from '../interfaces/evolution/types';
 
-const StateContext = createContext<StateContextValue | undefined>(undefined);
+export const StateContext = createContext<StateContextValue | undefined>(undefined);
 
 export interface StateProviderProps {
   children: React.ReactNode;
@@ -26,42 +25,6 @@ const stateReducer = (state: StateSystem, action: StateAction): StateSystem => {
     default:
       return state;
   }
-};
-
-const validateBackup = (backup: StateBackup): boolean => {
-  return !!backup && !!backup.state && !!backup.timestamp;
-};
-
-const validateState = (state: StateSystem): boolean => {
-  return !!state && !!state.version;
-};
-
-const validateStateSync = (localState: any, remoteState: any): boolean => {
-  return !!localState && !!remoteState;
-};
-
-const synchronizeStates = async (
-  localState: StateSystem,
-  remoteState: any
-): Promise<StateSystem> => {
-  return { ...localState, ...remoteState };
-};
-
-const resolveStateConflicts = async (
-  state: StateSystem,
-  conflicts: StateConflict[]
-): Promise<StateSystem> => {
-  return state;
-};
-
-const executeMigration = async (
-  state: StateSystem,
-  migration: MigrationStrategy
-): Promise<StateSystem> => {
-  return {
-    ...state,
-    version: migration.version
-  };
 };
 
 export const StateProvider: React.FC<StateProviderProps> = ({
@@ -81,43 +44,48 @@ export const StateProvider: React.FC<StateProviderProps> = ({
     data: {},
     ...initialState
   } as StateSystem);
-
+  
   const stateRef = useRef(state);
 
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
-
-  const value = {
+  
+  const value: StateContextValue = {
     state,
     dispatch,
     operations: {
-      backup: async () => {
-        const backup = {
-          state: stateRef.current,
-          timestamp: Date.now()
-        };
-        localStorage.setItem('state_backup', JSON.stringify(backup));
-      },
+      backup: async () => ({
+        state: { ...state },
+        timestamp: Date.now()
+      }),
       restore: async (backup: StateBackup) => {
-        if (validateBackup(backup)) {
-          dispatch({ type: 'RESTORE_STATE', payload: backup.state });
-        }
+        dispatch({ type: 'RESTORE_STATE', payload: backup.state });
       },
       validate: () => {
-        return validateState(stateRef.current);
+        return (
+          !!state.version &&
+          Array.isArray(state.features) &&
+          Array.isArray(state.migrations)
+        );
       }
     },
     sync: {
       synchronize: async (remoteState: any) => {
-        const mergedState = await synchronizeStates(stateRef.current, remoteState);
-        dispatch({ type: 'UPDATE_STATE', payload: mergedState });
+        dispatch({ type: 'UPDATE_STATE', payload: remoteState });
       },
       validate: (localState: any, remoteState: any) => {
-        return validateStateSync(localState, remoteState);
+        return !!localState && !!remoteState;
       },
       resolveConflicts: async (conflicts: StateConflict[]) => {
-        const resolvedState = await resolveStateConflicts(stateRef.current, conflicts);
+        const resolutions = conflicts.map(conflict => ({
+          ...conflict,
+          resolution: conflict.remote || conflict.local
+        }));
+        const resolvedState = resolutions.reduce((acc, curr) => ({
+          ...acc,
+          [curr.path]: curr.resolution
+        }), {});
         dispatch({ type: 'UPDATE_STATE', payload: resolvedState });
       }
     },
@@ -126,8 +94,10 @@ export const StateProvider: React.FC<StateProviderProps> = ({
       features: state.features,
       migrations: state.migrations,
       migrateState: async (migration: MigrationStrategy) => {
-        const migratedState = await executeMigration(stateRef.current, migration);
-        dispatch({ type: 'UPDATE_STATE', payload: migratedState });
+        dispatch({ 
+          type: 'UPDATE_STATE',
+          payload: { version: migration.version }
+        });
       }
     }
   };
@@ -137,12 +107,4 @@ export const StateProvider: React.FC<StateProviderProps> = ({
       {children}
     </StateContext.Provider>
   );
-};
-
-export const useStateContext = () => {
-  const context = useContext(StateContext);
-  if (context === undefined) {
-    throw new Error('useStateContext must be used within a StateProvider');
-  }
-  return context;
 };

@@ -1,4 +1,4 @@
-import type { DomainConfig, Permission, User } from '../interfaces/domain/types';
+import type { DomainConfig, Permission, User } from '../../interfaces/domain/types';
 
 export const validateDomainAccess = (domain: string, user?: User): boolean => {
   if (!domain) return false;

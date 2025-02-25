@@ -1,114 +1,99 @@
-// ROCKRLite-MVP/ROCKRLite-Core/src/context/EvolutionContext.tsx
-import React, { createContext, useReducer } from 'react';
-import {
- EvolutionState,
- EvolutionAction, 
- EvolutionContextValue,
- Version,
- Feature,
- MigrationStrategy
+import React, { createContext, useReducer, useRef, useEffect } from 'react';
+import type {
+  EvolutionContextValue,
+  EvolutionAction,
+  Version,
+  Feature,
+  MigrationStrategy
 } from '../interfaces/evolution/types';
+import { validateVersion, executeMigration } from '../utils/evolution';
+
+const initialState = {
+  version: {
+    major: 1,
+    minor: 0,
+    patch: 0,
+    timestamp: Date.now()
+  },
+  features: [],
+  migrations: []
+};
 
 export const EvolutionContext = createContext<EvolutionContextValue | undefined>(undefined);
 
-const initialState: EvolutionState = {
- version: {
-   major: 1,
-   minor: 0,
-   patch: 0,
-   timestamp: Date.now()
- },
- features: {
-   enabled: [],
-   pending: []
- },
- migrations: {
-   current: '',
-   history: [],
-   pending: []
- }
-};
-
-const evolutionReducer = (state: EvolutionState, action: EvolutionAction): EvolutionState => {
- switch (action.type) {
-   case 'UPGRADE_VERSION':
-     return {
-       ...state,
-       version: action.payload
-     };
-   case 'ENABLE_FEATURE':
-     return {
-       ...state,
-       features: {
-         ...state.features,
-         enabled: [...state.features.enabled, action.payload]
-       }
-     };
-   case 'DISABLE_FEATURE':
-     return {
-       ...state,
-       features: {
-         ...state.features,
-         enabled: state.features.enabled.filter(f => f.id !== action.payload.id)
-       }
-     };
-   case 'ADD_MIGRATION':
-     return {
-       ...state,
-       migrations: {
-         ...state.migrations,
-         pending: [...state.migrations.pending, action.payload.id]
-       }
-     };
-   default:
-     return state;
- }
-};
-
-export interface EvolutionProviderProps {
- children: React.ReactNode;
+function evolutionReducer(state: any, action: EvolutionAction) {
+  switch (action.type) {
+    case 'UPDATE_VERSION':
+      return { ...state, version: action.payload };
+    case 'ENABLE_FEATURE':
+      return {
+        ...state,
+        features: { ...state.features, [action.payload]: true }
+      };
+    case 'DISABLE_FEATURE':
+      return {
+        ...state,
+        features: { ...state.features, [action.payload]: false }
+      };
+    case 'EXECUTE_MIGRATION':
+      return { ...state, version: action.payload.version };
+    default:
+      return state;
+  }
 }
 
-export const EvolutionProvider: React.FC<EvolutionProviderProps> = ({ children }) => {
- const [state, dispatch] = useReducer(evolutionReducer, initialState);
+export function EvolutionProvider({ children }: { children: React.ReactNode }) {
+  const [state, dispatch] = useReducer(evolutionReducer, initialState);
+  const stateRef = useRef(state);
 
- const value: EvolutionContextValue = {
-   state,
-   dispatch,
-   versions: {
-     current: state.version,
-     supported: [],
-     upgrade: async (target: Version) => {
-       dispatch({ type: 'UPGRADE_VERSION', payload: target });
-     },
-     rollback: async (version: Version) => {
-       dispatch({ type: 'UPGRADE_VERSION', payload: version });
-     }
-   },
-   features: {
-     active: state.features.enabled,
-     pending: state.features.pending,
-     enable: async (feature: Feature) => {
-       dispatch({ type: 'ENABLE_FEATURE', payload: feature });
-     },
-     disable: async (feature: Feature) => {
-       dispatch({ type: 'DISABLE_FEATURE', payload: feature });
-     }
-   },
-   migrations: {
-     strategies: [],
-     execute: async (strategy: MigrationStrategy) => {
-       dispatch({ type: 'ADD_MIGRATION', payload: strategy });
-     },
-     validate: (strategy: MigrationStrategy) => true
-   }
- };
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
 
- return (
-   <EvolutionContext.Provider value={value}>
-     {children}
-   </EvolutionContext.Provider>
- );
-};
+  const value: EvolutionContextValue = {
+    state: {
+      current: state,
+      migrateState: (state, migration) => executeMigration(state, migration),
+      validateState: (state, version) => validateVersion(version)
+    },
+    versions: {
+      current: state.version,
+      supported: [],
+      upgrade: async (target) => {
+        dispatch({ type: 'UPDATE_VERSION', payload: target });
+      },
+      rollback: async (version) => {
+        dispatch({ type: 'UPDATE_VERSION', payload: version });
+      }
+    },
+    features: {
+      active: state.features.filter((f: Feature) => f.enabled),
+      pending: state.features.filter((f: Feature) => !f.enabled),
+      enable: async (feature) => {
+        dispatch({ type: 'ENABLE_FEATURE', payload: feature.id });
+      },
+      disable: async (feature) => {
+        dispatch({ type: 'DISABLE_FEATURE', payload: feature.id });
+      }
+    },
+    migrations: {
+      strategies: state.migrations,
+      execute: async (strategy) => {
+        dispatch({ type: 'EXECUTE_MIGRATION', payload: strategy });
+      },
+      validate: () => true,
+      rollback: async (strategy) => {
+        const previousVersion = strategy.rollback[0]?.action;
+        if (previousVersion) {
+          dispatch({ type: 'UPDATE_VERSION', payload: previousVersion });
+        }
+      }
+    }
+  };
 
-export default EvolutionContext;
+  return (
+    <EvolutionContext.Provider value={value}>
+      {children}
+    </EvolutionContext.Provider>
+  );
+}
