@@ -1,7 +1,5 @@
-// src/interfaces/state/state-types-new.ts
+// src/interfaces/state/types.ts
 import { Version, Feature, MigrationStrategy } from '../evolution/types';
-
-// No local declaration of MigrationStrategy
 
 export interface StateSystem {
   version: Version;
@@ -20,6 +18,7 @@ export interface StateConflict {
   path: string;
   local: any;
   remote: any;
+  resolution?: any; // Added to match newer interface
 }
 
 export type StateAction =
@@ -45,4 +44,9 @@ export interface StateContextValue {
     migrations: MigrationStrategy[];
     migrateState: (migration: MigrationStrategy) => Promise<void>;
   };
+}
+
+export interface StateProviderProps {
+  children: React.ReactNode;
+  initialState?: Partial<StateSystem>;
 }

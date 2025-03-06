@@ -1,4 +1,4 @@
- // src/interfaces/experience/types.ts
+// src/interfaces/experience/types.ts
 import type { Version, Feature, MigrationStrategy } from '../evolution/types';
 
 // Core Type Definitions
@@ -9,6 +9,8 @@ export type ExperienceType =
   | 'performance'
   | 'exhibition'
   | 'social';
+
+export type ExperienceStep = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 export type ExperienceSetting =
   | 'academic'
@@ -109,6 +111,30 @@ export interface RKSAllocation {
   };
 }
 
+// Enhanced RKS Allocation for X=Y Balance Support
+export interface EnhancedRKSAllocation extends RKSAllocation {
+  // UIMA eligibility
+  isEligibleForUima: boolean;
+  eligibilityReason?: string;
+  
+  // Variable locking
+  locked: Record<string, boolean>;
+  
+  // Balance management
+  xSide: {
+    total: number;
+    components: Record<string, number>;
+  };
+  ySide: {
+    total: number;
+    components: Record<string, number>;
+  };
+  
+  // Reset capabilities
+  resetToDefault: (variable: string) => void;
+  resetAllToDefault: () => void;
+}
+
 export interface RKSEstimate {
   total: number;
   mining: number;
@@ -121,8 +147,49 @@ export interface RKSEstimate {
   };
 }
 
+export interface AuctionConfig {
+  startDate: Date;
+  endDate: Date;
+  minimumBid: number;
+  reservedPercentage: number;
+  status: 'pending' | 'active' | 'closed';
+}
+
+// Participant types - moved before EvolvableExperience
+export interface HostParticipant {
+  userId: string;
+  role: string;
+  status: 'confirmed' | 'pending' | 'declined';
+  rksAllocation: number;
+}
+
+export interface AttendeeParticipant {
+  userId: string;
+  status: 'confirmed' | 'pending' | 'waitlist';
+  bid: number;
+}
+
+export interface CuratorParticipant {
+  userId: string;
+  status: 'confirmed' | 'pending';
+  rksAllocation: number;
+}
+
+export interface VenueParticipant {
+  venueId: string;
+  status: 'confirmed' | 'pending';
+  rksAllocation: number;
+}
+
+export interface ProductionParticipant {
+  userId: string;
+  role: string;
+  status: 'confirmed' | 'pending';
+  rksAllocation: number;
+}
+
 // Enhanced Experience System
-export interface EvolvableExperience extends Experience {
+export interface EvolvableExperience extends Omit<Experience, 'rks'> {
   // Additional fields from Updated Part 3
   domainId: string;
   title: string;
@@ -155,44 +222,30 @@ export interface EvolvableExperience extends Experience {
   };
 }
 
-export interface AuctionConfig {
-  startDate: Date;
-  endDate: Date;
-  minimumBid: number;
-  reservedPercentage: number;
-  status: 'pending' | 'active' | 'closed';
+// Template System
+export interface ExperienceTemplate {
+  id: string;
+  name: string;
+  description: string;
+  type: ExperienceType;
+  setting: ExperienceSetting;
+  defaultCapacity: {
+    min: number;
+    max: number;
+    target: number;
+  };
+  defaultRks: RKSAllocation;
+  recommendedFor: string[]; // Profile types this template is suited for
+  icon?: React.ReactNode;
 }
 
-export interface HostParticipant {
-  userId: string;
-  role: string;
-  status: 'confirmed' | 'pending' | 'declined';
-  rksAllocation: number;
-}
-
-export interface AttendeeParticipant {
-  userId: string;
-  status: 'confirmed' | 'pending' | 'waitlist';
-  bid: number;
-}
-
-export interface CuratorParticipant {
-  userId: string;
-  status: 'confirmed' | 'pending';
-  rksAllocation: number;
-}
-
-export interface VenueParticipant {
-  venueId: string;
-  status: 'confirmed' | 'pending';
-  rksAllocation: number;
-}
-
-export interface ProductionParticipant {
-  userId: string;
-  role: string;
-  status: 'confirmed' | 'pending';
-  rksAllocation: number;
+// Balance Management Types
+export interface BalanceResult {
+  xTotal: number;
+  yTotal: number;
+  isBalanced: boolean;
+  difference: number;
+  adjustableVariables: string[];
 }
 
 // Experience UI Component Types
@@ -258,6 +311,30 @@ export interface ExperienceState {
     version: Version;
     features: string[];
   };
+  
+  // Navigation and step tracking
+  steps: {
+    currentStep: number;
+    totalSteps: number;
+    stepValidation: Record<number, boolean>;
+    canNavigate: (toStep: number) => boolean;
+  };
+  
+  // Template tracking
+  template: {
+    id: string;
+    source: string;
+    isCustomized: boolean;
+    resetToTemplate: () => void;
+  };
+  
+  // X=Y balance support
+  balance: {
+    xTotal: number;
+    yTotal: number;
+    isBalanced: boolean;
+    lockedVariables: string[];
+  };
 }
 
 export type ExperienceAction =
@@ -267,7 +344,13 @@ export type ExperienceAction =
   | { type: 'UPDATE_VALIDATION'; payload: ValidationResult }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'RESET' };
+  | { type: 'RESET' }
+  | { type: 'NAVIGATE_TO_STEP'; step: number }
+  | { type: 'LOCK_VARIABLE'; variable: string }
+  | { type: 'UNLOCK_VARIABLE'; variable: string }
+  | { type: 'APPLY_TEMPLATE'; template: ExperienceTemplate }
+  | { type: 'RESET_VARIABLE'; variable: string }
+  | { type: 'UPDATE_BALANCE'; balance: BalanceResult };
 
 export interface ExperienceContextValue {
   state: ExperienceState;
@@ -295,6 +378,29 @@ export interface ExperienceContextValue {
     errors: ValidationError[];
     warnings: ValidationWarning[];
     validate: () => Promise<boolean>;
+  };
+  
+  // Navigation
+  navigation: {
+    goToStep: (step: number) => Promise<boolean>;
+    canNavigate: (fromStep: number, toStep: number) => boolean;
+    saveCurrentStep: () => Promise<void>;
+  };
+  
+  // Template management
+  templates: {
+    available: ExperienceTemplate[];
+    current: ExperienceTemplate | null;
+    apply: (templateId: string) => Promise<void>;
+    revertToTemplate: () => Promise<void>;
+  };
+  
+  // Balance management
+  balance: {
+    lockVariable: (variable: string) => Promise<boolean>;
+    unlockVariable: (variable: string) => Promise<void>;
+    updateVariable: (variable: string, value: any) => Promise<boolean>;
+    getAdjustableVariables: () => string[];
   };
 }
 
@@ -340,5 +446,14 @@ export interface BasicDetailsProps {
   domain: string;
   onUpdate: (details: any) => void;
   features?: string[];
+  className?: string;
+}
+
+// Multi-step Navigation Props
+export interface StepNavigationProps {
+  currentStep: number;
+  totalSteps: number;
+  stepValidation: Record<number, boolean>;
+  onStepChange: (step: number) => void;
   className?: string;
 }

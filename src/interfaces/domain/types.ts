@@ -1,3 +1,4 @@
+// src/interfaces/domain/types.ts
 import { Version } from '../evolution/types';
 import { MigrationStrategy } from '../evolution/types';
 import React from 'react';
@@ -9,6 +10,22 @@ export interface FeatureMap {
 export interface RoleAllocation {
   role: string;
   percentage: number;
+}
+
+// Updated Domain interface with config for experience utilities
+export interface Domain {
+  id: string;
+  name: string;
+  emailPattern: string; // e.g. "@ox.ac.uk"
+  features: FeatureMap;
+  restrictions: string[];
+  config?: {
+    eligibleExperienceTypes?: string[];
+    eligibleExperienceSettings?: string[];
+    eligibleSubjects?: string[];
+    eligibleGenres?: string[];
+    [key: string]: any;
+  };
 }
 
 export interface DomainState {
@@ -32,6 +49,12 @@ export interface DomainConfig {
     targetSeatPrice: number;
     roleAllocations: RoleAllocation[];
   };
+}
+
+export interface VerificationConfig {
+  type: string;
+  required: boolean;
+  validationRules: string[];
 }
 
 export interface Permission {
