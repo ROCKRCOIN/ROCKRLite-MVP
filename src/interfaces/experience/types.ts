@@ -199,6 +199,7 @@ export interface EvolvableExperience extends Omit<Experience, 'rks'> {
     visibility: ExperienceVisibility;
     allowedDomains: string[];
   };
+  
   // Enhanced RKS Configuration
   rks: {
     targetSeatPrice: number;
@@ -206,6 +207,7 @@ export interface EvolvableExperience extends Omit<Experience, 'rks'> {
     allocation: RKSAllocation;
     auction: AuctionConfig;
   };
+  
   // Participant Management
   participants: {
     hosts: HostParticipant[];
@@ -214,6 +216,7 @@ export interface EvolvableExperience extends Omit<Experience, 'rks'> {
     venue: VenueParticipant;
     production?: ProductionParticipant[];
   };
+  
   // Evolution Support
   evolution: {
     version: Version;
@@ -222,13 +225,17 @@ export interface EvolvableExperience extends Omit<Experience, 'rks'> {
   };
 }
 
-// Template System
+// Template System - Enhanced to support full template functionality
 export interface ExperienceTemplate {
   id: string;
   name: string;
   description: string;
   type: ExperienceType;
   setting: ExperienceSetting;
+  // Added properties from specification requirements
+  subject?: string;
+  subjectLevel?: string;
+  genre?: string;
   defaultCapacity: {
     min: number;
     max: number;
@@ -237,15 +244,27 @@ export interface ExperienceTemplate {
   defaultRks: RKSAllocation;
   recommendedFor: string[]; // Profile types this template is suited for
   icon?: React.ReactNode;
+  // Template customization tracking
+  isCustomized?: boolean;
+  sourceTemplateId?: string;
 }
 
-// Balance Management Types
+// Balance Management Types - Enhanced to support variable locking
 export interface BalanceResult {
   xTotal: number;
   yTotal: number;
   isBalanced: boolean;
   difference: number;
   adjustableVariables: string[];
+  // Added properties from specification requirements
+  lockedVariables: string[];
+  adjustments: Array<{
+    variable: string;
+    oldValue: number;
+    newValue: number;
+    reason: string;
+  }>;
+  timestamp: number;
 }
 
 // Experience UI Component Types
@@ -299,6 +318,15 @@ export interface ValidationState {
   isValid: boolean;
 }
 
+// Step-specific validation types
+export interface StepValidation {
+  step: ExperienceStep;
+  isValid: boolean;
+  errors: ValidationError[];
+  warnings: ValidationWarning[];
+  lastValidated: number;
+}
+
 // State Management Types
 export interface ExperienceState {
   currentStep: number;
@@ -316,8 +344,8 @@ export interface ExperienceState {
   steps: {
     currentStep: number;
     totalSteps: number;
-    stepValidation: Record<number, boolean>;
-    canNavigate: (toStep: number) => boolean;
+    stepValidation: Record<ExperienceStep, boolean>;
+    canNavigate: (toStep: ExperienceStep) => boolean;
   };
   
   // Template tracking
@@ -338,14 +366,14 @@ export interface ExperienceState {
 }
 
 export type ExperienceAction =
-  | { type: 'UPDATE_STEP'; step: number; data: any }
+  | { type: 'UPDATE_STEP'; step: ExperienceStep; data: any }
   | { type: 'SAVE_DRAFT'; payload: Experience }
   | { type: 'PUBLISH'; payload: Experience }
   | { type: 'UPDATE_VALIDATION'; payload: ValidationResult }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null }
   | { type: 'RESET' }
-  | { type: 'NAVIGATE_TO_STEP'; step: number }
+  | { type: 'NAVIGATE_TO_STEP'; step: ExperienceStep }
   | { type: 'LOCK_VARIABLE'; variable: string }
   | { type: 'UNLOCK_VARIABLE'; variable: string }
   | { type: 'APPLY_TEMPLATE'; template: ExperienceTemplate }
@@ -378,13 +406,15 @@ export interface ExperienceContextValue {
     errors: ValidationError[];
     warnings: ValidationWarning[];
     validate: () => Promise<boolean>;
+    validateStep: (step: ExperienceStep) => Promise<boolean>;
   };
   
   // Navigation
   navigation: {
-    goToStep: (step: number) => Promise<boolean>;
-    canNavigate: (fromStep: number, toStep: number) => boolean;
+    goToStep: (step: ExperienceStep) => Promise<boolean>;
+    canNavigate: (fromStep: ExperienceStep, toStep: ExperienceStep) => boolean;
     saveCurrentStep: () => Promise<void>;
+    getStepName: (step: ExperienceStep) => string;
   };
   
   // Template management
@@ -393,6 +423,7 @@ export interface ExperienceContextValue {
     current: ExperienceTemplate | null;
     apply: (templateId: string) => Promise<void>;
     revertToTemplate: () => Promise<void>;
+    customize: (customizations: Partial<ExperienceTemplate>) => Promise<void>;
   };
   
   // Balance management
@@ -401,6 +432,7 @@ export interface ExperienceContextValue {
     unlockVariable: (variable: string) => Promise<void>;
     updateVariable: (variable: string, value: any) => Promise<boolean>;
     getAdjustableVariables: () => string[];
+    calculateBalance: () => BalanceResult;
   };
 }
 
@@ -451,9 +483,9 @@ export interface BasicDetailsProps {
 
 // Multi-step Navigation Props
 export interface StepNavigationProps {
-  currentStep: number;
+  currentStep: ExperienceStep;
   totalSteps: number;
-  stepValidation: Record<number, boolean>;
-  onStepChange: (step: number) => void;
+  stepValidation: Record<ExperienceStep, boolean>;
+  onStepChange: (step: ExperienceStep) => void;
   className?: string;
 }

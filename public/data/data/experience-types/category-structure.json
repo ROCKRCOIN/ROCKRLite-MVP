@@ -67,6 +67,72 @@
           }
         }
       }
+    },
+    "education": {
+      "academic": {
+        "structure": {
+          "level_3": {
+            "economics": {
+              "id": "economics",
+              "label": "Economics",
+              "level_4": {
+                "monetary_policy": {
+                  "id": "monetary_policy",
+                  "label": "Monetary Policy",
+                  "level_5": ["Central Banking", "Interest Rates", "Currency Management", "Inflation Control"]
+                },
+                "microeconomics": {
+                  "id": "microeconomics",
+                  "label": "Microeconomics",
+                  "level_5": ["Consumer Behavior", "Market Structures", "Theory of the Firm"]
+                },
+                "macroeconomics": {
+                  "id": "macroeconomics",
+                  "label": "Macroeconomics",
+                  "level_5": ["Economic Growth", "Business Cycles", "Unemployment", "Inflation"]
+                }
+              }
+            },
+            "mathematics": {
+              "id": "mathematics",
+              "label": "Mathematics",
+              "level_4": {
+                "pure_math": {
+                  "id": "pure_math",
+                  "label": "Pure Mathematics",
+                  "level_5": ["Algebra", "Calculus", "Geometry", "Number Theory"]
+                },
+                "applied_math": {
+                  "id": "applied_math",
+                  "label": "Applied Mathematics",
+                  "level_5": ["Statistics", "Operational Research", "Financial Mathematics"]
+                }
+              }
+            },
+            "science": {
+              "id": "science",
+              "label": "Science",
+              "level_4": {
+                "physics": {
+                  "id": "physics",
+                  "label": "Physics",
+                  "level_5": ["Mechanics", "Quantum Physics", "Thermodynamics", "Electromagnetism"]
+                },
+                "chemistry": {
+                  "id": "chemistry",
+                  "label": "Chemistry",
+                  "level_5": ["Organic Chemistry", "Inorganic Chemistry", "Physical Chemistry"]
+                },
+                "biology": {
+                  "id": "biology",
+                  "label": "Biology",
+                  "level_5": ["Molecular Biology", "Ecology", "Genetics", "Evolutionary Biology"]
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

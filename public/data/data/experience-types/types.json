@@ -187,3 +187,26 @@
           "capacity_default": [50, 75, 100, 250, 500]
         },
         {
+          "id": "festival",
+          "label": "Festival",
+          "capacity_default": [100, 250, 500, 1000]
+        },
+        {
+          "id": "charity",
+          "label": "Charity",
+          "capacity_default": [20, 50, 100, 250]
+        },
+        {
+          "id": "club",
+          "label": "Club",
+          "capacity_default": [10, 25, 50, 100]
+        },
+        {
+          "id": "networking",
+          "label": "Networking",
+          "capacity_default": [20, 50, 100, 250]
+        }
+      ]
+    }
+  }
+}
