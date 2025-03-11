@@ -1,6 +1,7 @@
 // src/interfaces/experience/types.ts
 import type { Version, Feature, MigrationStrategy } from '../evolution/types';
 
+
 // Core Type Definitions
 export type ExperienceType =
   | 'lecture'
@@ -10,7 +11,9 @@ export type ExperienceType =
   | 'exhibition'
   | 'social';
 
+
 export type ExperienceStep = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+
 
 export type ExperienceSetting =
   | 'academic'
@@ -19,6 +22,7 @@ export type ExperienceSetting =
   | 'wellness'
   | 'professional';
 
+
 export type ExperienceStatus =
   | 'draft'
   | 'published'
@@ -26,16 +30,19 @@ export type ExperienceStatus =
   | 'completed'
   | 'cancelled';
 
+
 export type SlotStatus =
   | 'available'
   | 'booked'
   | 'pending'
   | 'unavailable';
 
+
 export type ExperienceVisibility =
   | 'domain-only'
   | 'selected-domains'
   | 'public';
+
 
 // Experience Core Types
 export interface Experience {
@@ -56,6 +63,7 @@ export interface Experience {
   status: ExperienceStatus;
 }
 
+
 export interface Location {
   country: string;
   city: string;
@@ -63,6 +71,7 @@ export interface Location {
   capacity: number;
   features: string[];
 }
+
 
 export interface Venue {
   id: string;
@@ -73,12 +82,14 @@ export interface Venue {
   address: string;
 }
 
+
 export interface Schedule {
   slots: TimeSlot[];
   duration: number;
   timezone: string;
   preferences: SchedulePreference[];
 }
+
 
 export interface TimeSlot {
   start: Date;
@@ -87,12 +98,14 @@ export interface TimeSlot {
   status: SlotStatus;
 }
 
+
 export interface SchedulePreference {
   dayOfWeek: number;
   startTime: string;
   endTime: string;
   priority: number;
 }
+
 
 export interface RKSAllocation {
   total: number;
@@ -111,15 +124,16 @@ export interface RKSAllocation {
   };
 }
 
+
 // Enhanced RKS Allocation for X=Y Balance Support
 export interface EnhancedRKSAllocation extends RKSAllocation {
   // UIMA eligibility
   isEligibleForUima: boolean;
   eligibilityReason?: string;
-  
+ 
   // Variable locking
   locked: Record<string, boolean>;
-  
+ 
   // Balance management
   xSide: {
     total: number;
@@ -129,11 +143,12 @@ export interface EnhancedRKSAllocation extends RKSAllocation {
     total: number;
     components: Record<string, number>;
   };
-  
+ 
   // Reset capabilities
   resetToDefault: (variable: string) => void;
   resetAllToDefault: () => void;
 }
+
 
 export interface RKSEstimate {
   total: number;
@@ -147,6 +162,7 @@ export interface RKSEstimate {
   };
 }
 
+
 export interface AuctionConfig {
   startDate: Date;
   endDate: Date;
@@ -154,6 +170,7 @@ export interface AuctionConfig {
   reservedPercentage: number;
   status: 'pending' | 'active' | 'closed';
 }
+
 
 // Participant types - moved before EvolvableExperience
 export interface HostParticipant {
@@ -163,11 +180,13 @@ export interface HostParticipant {
   rksAllocation: number;
 }
 
+
 export interface AttendeeParticipant {
   userId: string;
   status: 'confirmed' | 'pending' | 'waitlist';
   bid: number;
 }
+
 
 export interface CuratorParticipant {
   userId: string;
@@ -175,11 +194,13 @@ export interface CuratorParticipant {
   rksAllocation: number;
 }
 
+
 export interface VenueParticipant {
   venueId: string;
   status: 'confirmed' | 'pending';
   rksAllocation: number;
 }
+
 
 export interface ProductionParticipant {
   userId: string;
@@ -187,6 +208,7 @@ export interface ProductionParticipant {
   status: 'confirmed' | 'pending';
   rksAllocation: number;
 }
+
 
 // Enhanced Experience System
 export interface EvolvableExperience extends Omit<Experience, 'rks'> {
@@ -199,7 +221,7 @@ export interface EvolvableExperience extends Omit<Experience, 'rks'> {
     visibility: ExperienceVisibility;
     allowedDomains: string[];
   };
-  
+ 
   // Enhanced RKS Configuration
   rks: {
     targetSeatPrice: number;
@@ -207,7 +229,7 @@ export interface EvolvableExperience extends Omit<Experience, 'rks'> {
     allocation: RKSAllocation;
     auction: AuctionConfig;
   };
-  
+ 
   // Participant Management
   participants: {
     hosts: HostParticipant[];
@@ -216,7 +238,7 @@ export interface EvolvableExperience extends Omit<Experience, 'rks'> {
     venue: VenueParticipant;
     production?: ProductionParticipant[];
   };
-  
+ 
   // Evolution Support
   evolution: {
     version: Version;
@@ -224,6 +246,7 @@ export interface EvolvableExperience extends Omit<Experience, 'rks'> {
     migrations: MigrationStrategy[];
   };
 }
+
 
 // Template System - Enhanced to support full template functionality
 export interface ExperienceTemplate {
@@ -249,6 +272,7 @@ export interface ExperienceTemplate {
   sourceTemplateId?: string;
 }
 
+
 // Balance Management Types - Enhanced to support variable locking
 export interface BalanceResult {
   xTotal: number;
@@ -267,6 +291,7 @@ export interface BalanceResult {
   timestamp: number;
 }
 
+
 // Experience UI Component Types
 export interface ExperienceTypeOption {
   id: ExperienceType;
@@ -275,12 +300,14 @@ export interface ExperienceTypeOption {
   icon?: React.ReactNode;
 }
 
+
 export interface SettingOption {
   id: ExperienceSetting;
   name: string;
   description: string;
   icon?: React.ReactNode;
 }
+
 
 export interface Step1Data {
   type: ExperienceType;
@@ -294,16 +321,19 @@ export interface Step1Data {
   rks: RKSEstimate;
 }
 
+
 // Validation Types
 export interface ValidationError {
   field: string;
   message: string;
 }
 
+
 export interface ValidationWarning {
   field: string;
   message: string;
 }
+
 
 export interface ValidationResult {
   isValid: boolean;
@@ -311,12 +341,14 @@ export interface ValidationResult {
   warnings: ValidationWarning[];
 }
 
+
 export interface ValidationState {
   errors: ValidationError[];
   warnings: ValidationWarning[];
   lastChecked: number;
   isValid: boolean;
 }
+
 
 // Step-specific validation types
 export interface StepValidation {
@@ -326,6 +358,7 @@ export interface StepValidation {
   warnings: ValidationWarning[];
   lastValidated: number;
 }
+
 
 // State Management Types
 export interface ExperienceState {
@@ -339,7 +372,7 @@ export interface ExperienceState {
     version: Version;
     features: string[];
   };
-  
+ 
   // Navigation and step tracking
   steps: {
     currentStep: number;
@@ -347,7 +380,7 @@ export interface ExperienceState {
     stepValidation: Record<ExperienceStep, boolean>;
     canNavigate: (toStep: ExperienceStep) => boolean;
   };
-  
+ 
   // Template tracking
   template: {
     id: string;
@@ -355,7 +388,7 @@ export interface ExperienceState {
     isCustomized: boolean;
     resetToTemplate: () => void;
   };
-  
+ 
   // X=Y balance support
   balance: {
     xTotal: number;
@@ -364,6 +397,7 @@ export interface ExperienceState {
     lockedVariables: string[];
   };
 }
+
 
 export type ExperienceAction =
   | { type: 'UPDATE_STEP'; step: ExperienceStep; data: any }
@@ -380,10 +414,11 @@ export type ExperienceAction =
   | { type: 'RESET_VARIABLE'; variable: string }
   | { type: 'UPDATE_BALANCE'; balance: BalanceResult };
 
+
 export interface ExperienceContextValue {
   state: ExperienceState;
   dispatch: React.Dispatch<ExperienceAction>;
-  
+ 
   // Experience Management
   experience: {
     current: Experience;
@@ -393,14 +428,14 @@ export interface ExperienceContextValue {
     update: (data: Partial<Experience>) => Promise<void>;
     publish: () => Promise<void>;
   };
-  
+ 
   // Evolution Support
   evolution: {
     version: Version;
     features: string[];
     upgrade: (experience: Experience) => Promise<void>;
   };
-  
+ 
   // Validation
   validation: {
     errors: ValidationError[];
@@ -408,7 +443,7 @@ export interface ExperienceContextValue {
     validate: () => Promise<boolean>;
     validateStep: (step: ExperienceStep) => Promise<boolean>;
   };
-  
+ 
   // Navigation
   navigation: {
     goToStep: (step: ExperienceStep) => Promise<boolean>;
@@ -416,7 +451,7 @@ export interface ExperienceContextValue {
     saveCurrentStep: () => Promise<void>;
     getStepName: (step: ExperienceStep) => string;
   };
-  
+ 
   // Template management
   templates: {
     available: ExperienceTemplate[];
@@ -425,7 +460,7 @@ export interface ExperienceContextValue {
     revertToTemplate: () => Promise<void>;
     customize: (customizations: Partial<ExperienceTemplate>) => Promise<void>;
   };
-  
+ 
   // Balance management
   balance: {
     lockVariable: (variable: string) => Promise<boolean>;
@@ -436,12 +471,14 @@ export interface ExperienceContextValue {
   };
 }
 
+
 // UI Component Props
 export interface Step1Props {
   onComplete: (data: Step1Data) => void;
   onSave: (data: Step1Data) => void;
   initialData?: Partial<Step1Data>;
 }
+
 
 export interface SettingSheetProps {
   type: ExperienceType;
@@ -450,12 +487,14 @@ export interface SettingSheetProps {
   onClose: () => void;
 }
 
+
 export interface LocationSheetProps {
   country?: string;
   onSelect: (location: Location) => void;
   isOpen: boolean;
   onClose: () => void;
 }
+
 
 export interface TypeSelectorProps {
   types: ExperienceTypeOption[];
@@ -466,6 +505,7 @@ export interface TypeSelectorProps {
   className?: string;
 }
 
+
 export interface CapacitySelectorProps {
   minCapacity?: number;
   maxCapacity?: number;
@@ -474,12 +514,14 @@ export interface CapacitySelectorProps {
   className?: string;
 }
 
+
 export interface BasicDetailsProps {
   domain: string;
   onUpdate: (details: any) => void;
   features?: string[];
   className?: string;
 }
+
 
 // Multi-step Navigation Props
 export interface StepNavigationProps {
@@ -489,3 +531,4 @@ export interface StepNavigationProps {
   onStepChange: (step: ExperienceStep) => void;
   className?: string;
 }
+

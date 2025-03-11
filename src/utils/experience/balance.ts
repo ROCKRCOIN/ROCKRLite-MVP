@@ -1,9 +1,10 @@
 /**
  * Experience Balance Utilities
- * 
+ *
  * Utilities for managing X=Y balance in experience auctions.
- * Based on specifications from "Clarification of Specification re Live Experience Multi-Step Process and RKS Allocation"
- * 
+ * Based on specifications from "Clarification of Specification re Live Experience
+ * Multi-Step Process and RKS Allocation"
+ *
  * Core concepts:
  * - X side = Attendees (revenue)
  * - Y side = Suppliers (costs: host, curator, venue, production, ai)
@@ -30,20 +31,15 @@ import type {
 export const calculateXYBalance = (experience: Experience): BalanceResult => {
   // Extract values for X side (attendees/revenue)
   const xTotal = calculateXSideTotal(experience);
-  
   // Extract values for Y side (suppliers/costs)
   const yTotal = calculateYSideTotal(experience);
-  
   // Check if there's a balance (X = Y)
   const isBalanced = Math.abs(xTotal - yTotal) < 0.001; // Using small epsilon for float comparison
-  
   // Calculate the difference (used for adjustments)
   const difference = xTotal - yTotal;
-  
   // Determine locked and adjustable variables
   const lockedVariables: string[] = [];
   const adjustableVariables: string[] = [];
-  
   // Check if an enhanced RKS allocation exists with locked variables
   const enhancedRKS = experience.rks as EnhancedRKSAllocation;
   if (enhancedRKS && enhancedRKS.locked) {
@@ -80,15 +76,12 @@ export const calculateXYBalance = (experience: Experience): BalanceResult => {
  */
 const calculateXSideTotal = (experience: Experience): number => {
   const { capacity, rks } = experience;
-  
-  // In MVP, X side is calculated based on the attendees allocation 
+  // In MVP, X side is calculated based on the attendees allocation
   // or capacity.target * average bid if enhanced allocation is available
-  
   // Standard calculation
   if (rks && rks.breakdown && rks.breakdown.attendees) {
     return rks.breakdown.attendees;
   }
-  
   // Enhanced calculation with average bid
   const enhancedRKS = rks as EnhancedRKSAllocation;
   if (enhancedRKS?.xSide?.components?.averageBid) {
@@ -96,7 +89,6 @@ const calculateXSideTotal = (experience: Experience): number => {
     const attendeeCount = capacity.target || 0;
     return attendeeCount * averageBid;
   }
-  
   // Default value based on specification (3000 RKS per attendee)
   const defaultBid = 3000;
   const attendeeCount = capacity.target || 0;
@@ -111,15 +103,12 @@ const calculateXSideTotal = (experience: Experience): number => {
  */
 const calculateYSideTotal = (experience: Experience): number => {
   const { rks } = experience;
-  
   // If no RKS breakdown available, return 0
   if (!rks || !rks.breakdown) {
     return 0;
   }
-  
   // Extract RKS breakdown
   const breakdown = rks.breakdown;
-  
   // Sum all components of the Y side (all supplier costs)
   return (
     (breakdown.host || 0) +
@@ -145,7 +134,6 @@ export const validateLockingRules = (
 ): ValidationResult => {
   const errors: ValidationError[] = [];
   const warnings: ValidationWarning[] = [];
-
   // Check if enhanced RKS allocation is present
   const enhancedRKS = experience.rks as EnhancedRKSAllocation;
   if (!enhancedRKS || !enhancedRKS.locked) {
@@ -159,18 +147,15 @@ export const validateLockingRules = (
       warnings
     };
   }
-
   // Get currently locked variables
   const currentlyLocked = Object.keys(enhancedRKS.locked).filter(key => 
     enhancedRKS.locked[key]
   );
-
   // Add the new variable to lock
   const wouldBeLocked = [...currentlyLocked];
   if (!wouldBeLocked.includes(variableToLock)) {
     wouldBeLocked.push(variableToLock);
   }
-
   // Check if too many variables would be locked
   const totalVariables = Object.keys(enhancedRKS.breakdown).length;
   if (wouldBeLocked.length >= totalVariables - 1) {
@@ -179,23 +164,19 @@ export const validateLockingRules = (
       message: 'Cannot lock all variables; at least one must remain adjustable to maintain X=Y balance'
     });
   }
-
   // Check if this would lock both X and Y sides completely
   const xSideLocked = variableToLock === 'attendees' || 
-    currentlyLocked.includes('attendees');
-  
+                     currentlyLocked.includes('attendees');
   const ySideVariables = ['host', 'curator', 'venue', 'production', 'ai'];
   const ySideLockedCount = ySideVariables.filter(v => 
     wouldBeLocked.includes(v)
   ).length;
-
   if (xSideLocked && ySideLockedCount >= ySideVariables.length) {
     errors.push({
       field: variableToLock,
       message: 'Cannot lock all variables on both sides (X and Y)'
     });
   }
-
   return {
     isValid: errors.length === 0,
     errors,
@@ -213,17 +194,14 @@ export const getAdjustableVariables = (experience: Experience): string[] => {
   // Default Y-side components that can be adjusted:
   // host, curator, venue, production, ai
   const ySideVariables = ['host', 'curator', 'venue', 'production', 'ai'];
-  
   // Include X-side (attendees) as potentially adjustable
   const allAdjustable = ['attendees', ...ySideVariables];
-  
   // If there's an enhanced RKS allocation with locked variables,
   // filter out the locked ones
   const enhancedRKS = experience.rks as EnhancedRKSAllocation;
   if (enhancedRKS?.locked) {
     return allAdjustable.filter(variable => !enhancedRKS.locked[variable]);
   }
-  
   return allAdjustable;
 };
 
@@ -245,7 +223,6 @@ export const adjustToMaintainBalance = (
   // Create a deep copy to avoid mutating the original
   const updatedExperience = JSON.parse(JSON.stringify(experience)) as Experience;
   const rks = updatedExperience.rks;
-  
   // Track original values before changes for adjustment history
   const originalValues: Record<string, number> = {};
   if (rks?.breakdown) {
@@ -253,27 +230,21 @@ export const adjustToMaintainBalance = (
       originalValues[key] = (rks.breakdown as Record<string, number>)[key] || 0;
     });
   }
-  
   // Check if this is an X side or Y side variable
   const isXSide = changedVariable === 'attendees';
-  
   // Apply the changed value
   if (rks && rks.breakdown) {
     // Type assertion is safe here as we know the variable exists
     (rks.breakdown as Record<string, number>)[changedVariable] = newValue;
   }
-
   // Calculate the new balance
   const balance = calculateXYBalance(updatedExperience);
-  
   // If already balanced, return early
   if (balance.isBalanced) {
     return updatedExperience;
   }
-
   // Get locked variables
   const lockedVariables = balance.lockedVariables || [];
-  
   // Track adjustments
   const adjustments: Array<{
     variable: string;
@@ -281,7 +252,6 @@ export const adjustToMaintainBalance = (
     newValue: number;
     reason: string;
   }> = [];
-  
   // Add initial change to adjustments
   adjustments.push({
     variable: changedVariable,
@@ -289,7 +259,6 @@ export const adjustToMaintainBalance = (
     newValue: newValue,
     reason: 'User edited'
   });
-  
   // Determine which side needs adjustment
   if (isXSide) {
     // X side changed, adjust Y side
@@ -311,18 +280,15 @@ export const adjustToMaintainBalance = (
         }
       };
     }
-    
     if (!enhancedRKS.ySide) {
       enhancedRKS.ySide = {
         total: balance.yTotal,
         components: {}
       };
     }
-    
     // Update xSide and ySide totals
     enhancedRKS.xSide.total = balance.xTotal;
     enhancedRKS.ySide.total = balance.yTotal;
-    
     // Update components
     if (rks?.breakdown) {
       if (enhancedRKS.ySide.components) {
@@ -337,7 +303,6 @@ export const adjustToMaintainBalance = (
       }
     }
   }
-
   return updatedExperience;
 };
 
@@ -363,21 +328,16 @@ const adjustYSide = (
   originalValues: Record<string, number>
 ): void => {
   if (!experience.rks || !experience.rks.breakdown) return;
-  
   const breakdown = experience.rks.breakdown;
   const ySideVariables = ['host', 'curator', 'venue', 'production', 'ai'];
-  
   // Filter out locked variables
   const adjustableVariables = ySideVariables.filter(v => !lockedVariables.includes(v));
-  
   if (adjustableVariables.length === 0) return;
-  
   // Calculate current Y total for unlocked variables
   let currentUnlockedTotal = 0;
   for (const variable of adjustableVariables) {
     currentUnlockedTotal += (breakdown as Record<string, number>)[variable] || 0;
   }
-  
   // Calculate locked Y total
   let lockedTotal = 0;
   for (const variable of ySideVariables) {
@@ -385,22 +345,17 @@ const adjustYSide = (
       lockedTotal += (breakdown as Record<string, number>)[variable] || 0;
     }
   }
-  
   // Calculate how much to distribute
   const targetUnlockedTotal = targetTotal - lockedTotal;
-  
   // If nothing to distribute or negative amount, return
   if (targetUnlockedTotal <= 0 || currentUnlockedTotal <= 0) return;
-  
   // Calculate adjustment ratio
   const ratio = targetUnlockedTotal / currentUnlockedTotal;
-  
   // Apply adjustments
   for (const variable of adjustableVariables) {
     const currentValue = (breakdown as Record<string, number>)[variable] || 0;
     const newValue = Math.round(currentValue * ratio);
     (breakdown as Record<string, number>)[variable] = newValue;
-    
     // Track adjustment
     adjustments.push({
       variable,
@@ -433,16 +388,12 @@ const adjustXSide = (
   originalValues: Record<string, number>
 ): void => {
   if (!experience.rks || !experience.rks.breakdown) return;
-  
   // If attendees is locked, we can't adjust
   if (lockedVariables.includes('attendees')) return;
-  
   // Track the original value
   const originalValue = experience.rks.breakdown.attendees || 0;
-  
   // Just set attendees to match Y total
   (experience.rks.breakdown as Record<string, number>)['attendees'] = targetTotal;
-  
   // Track adjustment
   adjustments.push({
     variable: 'attendees',
@@ -467,27 +418,22 @@ export const resetVariableToDefault = (
 ): Experience => {
   // Create a deep copy to avoid mutating the original
   const updatedExperience = JSON.parse(JSON.stringify(experience)) as Experience;
-  
   if (!updatedExperience.rks || !updatedExperience.rks.breakdown || 
       !defaultExperience.rks || !defaultExperience.rks.breakdown) {
     return updatedExperience;
   }
-  
   // Get the current value before resetting
   const currentValue = (updatedExperience.rks.breakdown as Record<string, number>)[variable] || 0;
-  
   // Set the variable back to its default value
   if (Object.keys(defaultExperience.rks.breakdown).includes(variable)) {
     const defaultValue = (defaultExperience.rks.breakdown as Record<string, number>)[variable];
     (updatedExperience.rks.breakdown as Record<string, number>)[variable] = defaultValue;
-    
     // If this is an EnhancedRKSAllocation, track the reset
     const enhancedRKS = updatedExperience.rks as EnhancedRKSAllocation;
     if (enhancedRKS && typeof enhancedRKS.resetToDefault === 'function') {
       enhancedRKS.resetToDefault(variable);
     }
   }
-  
   // Re-balance after resetting
   return adjustToMaintainBalance(
     updatedExperience,
@@ -506,10 +452,8 @@ export const calculateRKSMining = (experience: Experience): number => {
   if (!experience.capacity || !experience.capacity.target) {
     return 0;
   }
-  
   // Base calculation from specs: target capacity * 100
   const baseAmount = experience.capacity.target * 100;
-  
   // Mining is 80% of the base amount
   return Math.floor(baseAmount * 0.8);
 };
