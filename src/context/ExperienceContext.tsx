@@ -11,6 +11,23 @@ import type {
 } from '../interfaces/experience/types';
 
 const initialState: ExperienceState = {
+  // Added step data properties
+  step1: {
+    experienceType: 'educational',
+    experienceSetting: 'Tutorial',
+    capacity: '2',
+    hostCount: '1',
+    country: 'uk',
+    city: 'oxford',
+  },
+  step2: {
+    title: '',
+    description: '',
+    subject: '',
+    subjectLevel: '',
+    genre: '',
+    resources: []
+  },
   currentStep: 0,
   data: {},
   isDraft: true,
@@ -214,6 +231,21 @@ export function ExperienceProvider({ children }: { children: React.ReactNode }) 
   const value: ExperienceContextValue = {
     state,
     dispatch,
+    // Add updateStep method
+    updateStep: (step, data) => {
+      // Update step-specific data
+      state[step as keyof ExperienceState] = {
+        ...state[step as keyof ExperienceState],
+        ...data
+      };
+      
+      // Also update the main data property for backward compatibility
+      dispatch({
+        type: 'UPDATE_STEP',
+        step: state.steps.currentStep,
+        data
+      });
+    },
     experience: {
       current: state.data as Experience,
       draft: state.isDraft ? state.data as Experience : null,

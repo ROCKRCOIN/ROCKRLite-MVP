@@ -376,6 +376,27 @@ export interface ExperienceState {
   // Navigation and step tracking
   steps: {
     currentStep: number;
+    // Added step data properties for multi-step process
+  step1?: {
+    experienceType?: string;
+    experienceSetting?: string;
+    capacity?: string;
+    hostCount?: string;
+    country?: string;
+    city?: string;
+  };
+  step2?: {
+    title?: string;
+    description?: string;
+    subject?: string;
+    subjectLevel?: string;
+    genre?: string;
+    resources?: Array<{
+      type: 'url' | 'file';
+      name: string;
+      value: string;
+    }>;
+  };
     totalSteps: number;
     stepValidation: Record<ExperienceStep, boolean>;
     canNavigate: (toStep: ExperienceStep) => boolean;
@@ -418,6 +439,8 @@ export type ExperienceAction =
 export interface ExperienceContextValue {
   state: ExperienceState;
   dispatch: React.Dispatch<ExperienceAction>;
+  // Added for step-based development
+  updateStep: (step: string, data: any) => void;
  
   // Experience Management
   experience: {

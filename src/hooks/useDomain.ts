@@ -1,7 +1,8 @@
-// ROCKRLite-MVP/ROCKRLite-Core/src/hooks/useDomain.ts
+// src/hooks/useDomain.ts
 import { useContext } from 'react';
 import { DomainContextValue } from '../interfaces/domain/types';
-import { DomainContext } from '../context/DomainContext';
+// Change the import to use the default export
+import DomainContext from '../context/DomainContext';
 import { Domain } from '../interfaces/domain/types';
 
 export const useDomain = (): DomainContextValue => {
@@ -14,6 +15,7 @@ export const useDomain = (): DomainContextValue => {
   return context;
 };
 
+// Keep the rest of your hooks unchanged
 export const useDomainValidation = (domain: Domain): boolean => {
   const { operations } = useDomain();
   return operations.validateDomain(domain);

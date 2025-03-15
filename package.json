@@ -1,7 +1,7 @@
 {
   "name": "rockrlite-mvp",
   "version": "1.0.0",
-  "description": "ROCKRLite MVP with mock blockchain implementation",
+  "description": "ROCKRlite MVP with mock blockchain implementation",
   "private": true,
   "workspaces": [
     "ROCKRLite-Core",
@@ -9,6 +9,11 @@
     "ROCKRLite-Domain",
     "ROCKRLite-Transaction"
   ],
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
   "dependencies": {
     "next": "14.2.24",
     "react": "18.2.0",

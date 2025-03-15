@@ -161,6 +161,15 @@ export interface RKSContextValue {
     upgradeRKS: (migration: MigrationStrategy) => Promise<void>;
     validateVersion: (version: Version) => boolean;
   };
+  
+  // RKS Allocation Calculation
+  calculateRKSAllocation: (params: {
+    experienceType: string;
+    experienceSetting: string;
+    capacity: number;
+    hostCount: number;
+    domain?: string;
+  }) => RKSAllocation;
 }
 
 export interface TransferParams {
@@ -651,6 +660,39 @@ export const RKSProvider: React.FC<{
       validateVersion: (version: Version) => {
         return version.major >= state.evolution.version.major;
       }
+    },
+    
+    // RKS Allocation calculation
+    calculateRKSAllocation: (params: {
+      experienceType: string;
+      experienceSetting: string;
+      capacity: number;
+      hostCount: number;
+      domain?: string;
+    }) => {
+      const { experienceType, experienceSetting, capacity, hostCount } = params;
+      
+      // Default allocation calculation
+      const baseAmount = 3000; // Base RKS per attendee
+      const total = baseAmount * capacity * 2; // x2 for mining
+      
+      // Breakdown according to the specification
+      return {
+        total,
+        breakdown: {
+          host: total * 0.2,
+          attendees: total * 0.5,
+          curator: total * 0.05,
+          venue: total * 0.1,
+          production: total * 0.1,
+          ai: total * 0.05
+        },
+        mining: {
+          available: total * 0.5, // 50% for mining
+          locked: 0,
+          distributed: 0
+        }
+      };
     }
   };
 
